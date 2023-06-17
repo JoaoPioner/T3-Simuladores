@@ -108,7 +108,7 @@ public class Simulacao{
     private Nodo defineDestino(Fila fila, double sorteio){
         double acc = 0;
         for (Nodo nodo : fila.saidas) {
-            if(sorteio<acc+nodo.probabilidade){
+            if(sorteio<=acc+nodo.probabilidade){
                 return nodo;
             }else {
                 acc += nodo.probabilidade;
