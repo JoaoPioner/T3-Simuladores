@@ -11,7 +11,7 @@ public class Main {
             List<Nodo> nodos2 = new ArrayList<>();
             List<Nodo> nodos3 = new ArrayList<>();     
 
-            Fila fila1 = new Fila("1", 2, 100000, 1.0, 4.0, 1.0, 1.5);
+            Fila fila1 = new Fila("1", 2, 10, 1.0, 4.0, 1.0, 1.5);
             Fila fila2 = new Fila("2", 3, 5, 0, 0, 5.0, 10.0);
             Fila fila3 = new Fila("3", 3, 5, 0, 0, 10.0, 20.0);
 
@@ -32,7 +32,7 @@ public class Main {
             filaLst.add(fila2);
             filaLst.add(fila3);
 
-            Simulacao simulacao = new Simulacao( filaLst,tempoInicial, (i+1)*10,21,5000000011L,227,100);
+            Simulacao simulacao = new Simulacao( filaLst,tempoInicial, (i+1)*10,21,5000000011L,227,100000);
             simulacao.ExecutaAlgoritmo();
         }      
        

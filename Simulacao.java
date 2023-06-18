@@ -129,17 +129,17 @@ public class Simulacao{
             if(fila.size <= fila.servers){
                 //definir destino
                 double sorteioSaida = FormulaConversao(fila.minService, fila.maxService, aleatoriosUtilizados.get(aleatorioAtual));
-                Nodo destino = defineDestino(fila, sorteioSaida);
+                Nodo destino = defineDestino(fila, aleatoriosUtilizados.get(aleatorioAtual+1));
                 //System.out.println("sorteio: " + sorteioSaida + " - " + fila.minService + " - " + fila.maxService + " - " + aleatoriosUtilizados.get(aleatorioAtual));
                 if (destino != null) {
-                    e = new Estado("P"+destino.src.name+" , "+destino.trgt.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
+                    e = new Estado("P"+destino.src.name+"->"+destino.trgt.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
                 } else {
                     e = new Estado("SA"+fila.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
                 }
                
                 contadorEventos++;
                 estados.add(e);
-                aleatorioAtual++;
+                aleatorioAtual+=2;
 
             }
 
@@ -165,17 +165,17 @@ public class Simulacao{
         Estado e;
         if(aFila1.size >= aFila1.servers){
             double sorteioSaida = FormulaConversao(aFila1.minService, aFila1.maxService, aleatoriosUtilizados.get(aleatorioAtual));
-            Nodo destino = defineDestino(aFila1, sorteioSaida);
+            Nodo destino = defineDestino(aFila1, aleatoriosUtilizados.get(aleatorioAtual+1));
             //System.out.println("sorteio: " + sorteioSaida + " - " + aFila1.minService + " - " + aFila1.maxService + " - " + aleatoriosUtilizados.get(aleatorioAtual));
             if(destino != null) {
-                e = new Estado("P"+aFila1.name+" , "+aFila2.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
+                e = new Estado("P"+aFila1.name+"->"+aFila2.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
             }else {
                 e = new Estado("SA"+aFila1.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
             }
             
             contadorEventos++;
             estados.add(e);
-            aleatorioAtual++;
+            aleatorioAtual+=2;
         }
 //meio sus
         if(aFila2.size < aFila2.capacity){
@@ -204,16 +204,16 @@ public class Simulacao{
 
         if(aFila.size >= aFila.servers){
             double sorteioSaida = FormulaConversao(aFila.minService, aFila.maxService, aleatoriosUtilizados.get(aleatorioAtual));
-            Nodo destino = defineDestino(aFila, sorteioSaida);
+            Nodo destino = defineDestino(aFila, aleatoriosUtilizados.get(aleatorioAtual+1));
             if(destino != null){
-                e = new Estado("P"+aFila.name+" , "+destino.trgt.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
+                e = new Estado("P"+aFila.name+"->"+destino.trgt.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
             }else {
                 e = new Estado("SA"+aFila.name,tempoTotal+sorteioSaida,sorteioSaida,contadorEventos);
             }
             
             contadorEventos++;
             estados.add(e);
-            aleatorioAtual++;
+            aleatorioAtual+=2;
         }
 
     }
@@ -241,7 +241,7 @@ public class Simulacao{
                 fila.output.println();
             } 
 
-            while(aleatorioAtual < aleatoriosUtilizados.size()){
+            while(aleatorioAtual < aleatoriosUtilizados.size()-1){
             
                 if (tempoTotal == 0) {
                     for (Fila fila : filaLst) {
@@ -279,7 +279,7 @@ public class Simulacao{
                     String nomeFila = atual.getTipo().substring(2);
                     chegada(getFilaByName(nomeFila));
                 }else if(atual.getTipo().startsWith("P")){
-                    String[] nomes = atual.getTipo().substring(1).split(" , ");
+                    String[] nomes = atual.getTipo().substring(1).split("->");
                     String nomeFila1 = nomes[0];
                     String nomeFila2 = nomes[1];
                     transferFila1ToFila2(getFilaByName(nomeFila1), getFilaByName(nomeFila2));
@@ -301,7 +301,7 @@ public class Simulacao{
                 fila.output.println("Numero de perdas: " + fila.loss);
             
 
-                fila.output.println("Estado "+ fila.name+",Tempo,Probabilidade");
+                fila.output.println("Estado Fila "+ fila.name+",Tempo,Probabilidade");
                 for(int i = 0; i <= fila.capacity; i++){    
                     double porcentagem = fila.tempos[i] / tempoTotal * 100;       
                     fila.output.printf("%d", i);
