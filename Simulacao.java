@@ -101,7 +101,8 @@ public class Simulacao{
     public void contabilizaTempo(){
         double deltaT = tempoTotal-tempoAnterior;
         for (Fila fila : filaLst) {
-            fila.tempos[fila.size] += deltaT; 
+            //fila.tempos[fila.size] += deltaT; 
+            fila.setTempos(deltaT);
         }        
     }
 
@@ -122,7 +123,7 @@ public class Simulacao{
         contabilizaTempo();
         Estado e;
 
-        if(fila.size < fila.capacity){
+        if((fila.size < fila.capacity) || fila.infinity){
 
             fila.size++;
 
@@ -178,7 +179,7 @@ public class Simulacao{
             aleatorioAtual+=2;
         }
 //meio sus
-        if(aFila2.size < aFila2.capacity){
+        if((aFila2.size < aFila2.capacity) || aFila2.infinity){
 
             aFila2.size++;
 
@@ -235,27 +236,27 @@ public class Simulacao{
 
             for (Fila fila : filaLst) {
                 fila.output.print("Evento,F"+fila.name+",Tempo,");
-                for (int i = 0; i <= fila.capacity; i++) {
+                for (int i = 0; i < fila.getStatesNumber(); i++) {
                     fila.output.print(i+",");
                 }
                 fila.output.println();
             } 
 
-            while(aleatorioAtual < aleatoriosUtilizados.size()-1){
+            while(aleatorioAtual < aleatoriosUtilizados.size()-2){
             
                 if (tempoTotal == 0) {
                     for (Fila fila : filaLst) {
                         fila.output.printf("-,%d,%.4f,", fila.size, tempoTotal);
-                        for (int i = 0; i < fila.tempos.length; i++) {
-                            fila.output.printf("%.4f,", fila.tempos[i]);
+                        for (int i = 0; i < fila.getStatesNumber(); i++) {
+                            fila.output.printf("%.4f,", fila.getTempoByIndex(i));
                         }
                         fila.output.println();
                     }
                 } else {
                     for (Fila fila : filaLst) {
                         fila.output.printf("(%d) %s,%d,%.4f,", atual.numEvento, atual.tipo, fila.size, tempoTotal);    
-                        for (int i = 0; i < fila.tempos.length; i++) {
-                            fila.output.printf("%.4f,", fila.tempos[i]);
+                        for (int i = 0; i < fila.getStatesNumber(); i++) {
+                            fila.output.printf("%.4f,", fila.getTempoByIndex(i));
                         }
                         fila.output.println();
                     }
@@ -293,8 +294,8 @@ public class Simulacao{
 
             for (Fila fila : filaLst) {
                 fila.output.printf("(%d) %s,%d,%d,%.4f,", atual.numEvento, atual.tipo, fila1.size,fila2.size, tempoTotal);
-                for (int i = 0; i < fila.tempos.length; i++) {
-                    fila.output.printf("%.4f,", fila.tempos[i]);
+                for (int i = 0; i < fila.getStatesNumber(); i++) {
+                    fila.output.printf("%.4f,", fila.getTempoByIndex(i));
                 }
                 fila.output.println();
             
@@ -302,10 +303,10 @@ public class Simulacao{
             
 
                 fila.output.println("Estado Fila "+ fila.name+",Tempo,Probabilidade");
-                for(int i = 0; i <= fila.capacity; i++){    
-                    double porcentagem = fila.tempos[i] / tempoTotal * 100;       
+                for(int i = 0; i < fila.getStatesNumber(); i++){    
+                    double porcentagem = fila.getTempoByIndex(i) / tempoTotal * 100;       
                     fila.output.printf("%d", i);
-                    fila.output.printf(",%.4f", fila.tempos[i]);
+                    fila.output.printf(",%.4f", fila.getTempoByIndex(i));
                     // System.out.println("porcentegem antes do arrendondamento: " + porcentagem);
                     // porcentagem = Math.round(porcentagem * 100.0) / 100.0;
                     // System.out.println("porcentegem depois do arrendondamento: " + porcentagem);
@@ -333,12 +334,12 @@ public class Simulacao{
         int perdas = 0;
         System.out.println("\n[Resultado da simulacao]\n");
         for (Fila fila : filaLst) {
-            System.out.printf("Fila "+fila.name+" : G/G/%d/%d\n", fila.servers, fila.capacity);
+            System.out.printf("Fila "+fila.name+" : G/G/%d/%d\n", fila.servers, fila.getStatesNumber()-1);
             System.out.println();
-            for (int i = 0; i < fila.tempos.length; i++) {
-                double porcentagem = fila.tempos[i] / tempoTotal * 100;   
+            for (int i = 0; i < fila.getStatesNumber(); i++) {
+                double porcentagem = fila.getTempoByIndex(i) / tempoTotal * 100;   
                 System.out.printf("%d", i);
-                System.out.printf("\t\t%.4f", fila.tempos[i]);
+                System.out.printf("\t\t%.4f", fila.getTempoByIndex(i));
                 System.out.printf("\t\t%.2f", porcentagem);
                 System.out.println("%");
             }

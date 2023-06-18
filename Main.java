@@ -6,14 +6,14 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException{
 
 
-        for (int i = 1; i <= 5; i++) {
+        //for (int i = 1; i <= 5; i++) {
             List<Nodo> nodos1 = new ArrayList<>();
             List<Nodo> nodos2 = new ArrayList<>();
             List<Nodo> nodos3 = new ArrayList<>();     
 
-            Fila fila1 = new Fila("1", 2, 10, 1.0, 4.0, 1.0, 1.5);
+            Fila fila1 = new Fila("1", 1, 0, 1.0, 4.0, 1.0, 1.5);
             Fila fila2 = new Fila("2", 3, 5, 0, 0, 5.0, 10.0);
-            Fila fila3 = new Fila("3", 3, 5, 0, 0, 10.0, 20.0);
+            Fila fila3 = new Fila("3", 2, 8, 0, 0, 10.0, 20.0);
 
             nodos1.add(new Nodo("Nodo 1", fila1, fila2, 0.8));
             nodos1.add(new Nodo("Nodo 2", fila1, fila3, 0.2));
@@ -25,16 +25,17 @@ public class Main {
             fila2.saidas = nodos2;
             fila3.saidas = nodos3;
 
-            double tempoInicial = 2.5;
+            double tempoInicial = 1.0;
 
             ArrayList<Fila> filaLst = new ArrayList<>();
             filaLst.add(fila1);
             filaLst.add(fila2);
             filaLst.add(fila3);
 
-            Simulacao simulacao = new Simulacao( filaLst,tempoInicial, (i+1)*10,21,5000000011L,227,100000);
+            //Simulacao simulacao = new Simulacao( filaLst,tempoInicial, (i+1)*10,21,5000000011L,227,100000);
+            Simulacao simulacao = new Simulacao( filaLst,tempoInicial, 10,21,5000000011L,227,100000);
             simulacao.ExecutaAlgoritmo();
-        }      
+        //}      
        
     }
 }
